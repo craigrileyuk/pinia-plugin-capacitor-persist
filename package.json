@@ -1,0 +1,57 @@
+{
+  "name": "pinia-plugin-capacitor-persist",
+  "version": "1.0.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/craigrileyuk/pinia-plugin-capacitor-persist.git"
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build && tsc",
+    "lint": "eslint . --ext .ts"
+  },
+  "files": [
+    "dist",
+    "types"
+  ],
+  "main": "./dist/pinia-capacitor-persist.umd.js",
+  "module": "./dist/pinia-capacitor-persist.es.js",
+  "exports": {
+    ".": {
+      "import": "./dist/pinia-capacitor-persist.es.js",
+      "require": "./dist/pinia-capacitor-persist.umd.js"
+    }
+  },
+  "types": "./dist",
+  "devDependencies": {
+    "@babel/types": "^7.17.0",
+    "@types/node": "^18.7.13",
+    "@typescript-eslint/eslint-plugin": "^5.14.0",
+    "@typescript-eslint/parser": "^5.14.0",
+    "c8": "^7.11.0",
+    "eslint": "^8.10.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-prettier": "^4.0.0",
+    "eslint-plugin-simple-import-sort": "^7.0.0",
+    "happy-dom": "^2.46.0",
+    "pinia": "^2.0.0",
+    "prettier": "^2.5.1",
+    "typescript": "4.5.4",
+    "vite": "^3.0.9",
+    "vue": "^3.2.31"
+  },
+  "dependencies": {
+    "vue-demi": "^0.13.11"
+  },
+  "peerDependencies": {
+    "@capacitor/preferences": "^4.0.0",
+    "@vue/composition-api": "^1.0.0",
+    "pinia": "^2.0.0",
+    "vue": ">=3.0.0"
+  },
+  "peerDependenciesMeta": {
+    "@vue/composition-api": {
+      "optional": true
+    }
+  }
+}
