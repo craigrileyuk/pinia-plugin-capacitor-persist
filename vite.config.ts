@@ -14,10 +14,15 @@ export default defineConfig({
 			entry: path.resolve(__dirname, 'src/index.ts'),
 			name: 'piniaCapacitorPersist',
 			fileName: (format: string) => `pinia-capacitor-persist.${format}.js`,
-			formats: ['es'],
+			formats: ['es', 'umd'],
 		},
 		rollupOptions: {
 			external: ['@capacitor/preferences', 'vue'],
+			output: {
+				globals: {
+					'@capacitor/preferences': 'CapacitorPreferences',
+				},
+			},
 		},
 	},
 });

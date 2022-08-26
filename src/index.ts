@@ -69,7 +69,10 @@ const updateStorage = async (store: Store, rules: PersistRules) => {
 	}
 };
 
-export default async ({ options, store /*, pinia, app */ }: PiniaPluginContext): Promise<void> => {
+export const piniaCapacitorPersist = async ({
+	options,
+	store /*, pinia, app */,
+}: PiniaPluginContext): Promise<void> => {
 	if (options.persist?.enabled !== true) return;
 
 	const rules = {
