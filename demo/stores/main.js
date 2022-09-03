@@ -12,5 +12,8 @@ export const useMainStore = defineStore('main', {
 	},
 	persist: {
 		enabled: true,
+		onRestored: (store) => {
+			console.log(`"${store.$id}" was successfully restored`);
+		},
 	},
 });

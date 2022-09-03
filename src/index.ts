@@ -1,19 +1,21 @@
 import { Preferences, GetResult, KeysResult } from '@capacitor/preferences';
 import { PiniaPluginContext } from 'pinia';
 
+type Store = PiniaPluginContext['store'];
+type PartialState = Partial<Store['$state']>;
+type RestoredFunction = (store: Store) => void;
+
 export interface PersistOptions {
 	enabled: true;
 	include?: string[];
 	exclude?: string[];
+	onRestored?: RestoredFunction;
 }
 
 export interface PersistRules {
 	include: string[];
 	exclude: string[];
 }
-
-type Store = PiniaPluginContext['store'];
-type PartialState = Partial<Store['$state']>;
 
 declare module 'pinia' {
 	export interface DefineStoreOptionsBase<S, Store> {
@@ -69,7 +71,12 @@ const updateStorage = async (store: Store, rules: PersistRules) => {
 	}
 };
 
-const restoreState = (store: Store, storeKey: string, rules: PersistRules): Promise<void> =>
+const restoreState = (
+	store: Store,
+	storeKey: string,
+	rules: PersistRules,
+	onRestored?: RestoredFunction
+): Promise<void> =>
 	new Promise((resolve) => {
 		getItem(storeKey).then((result) => {
 			const subscribe = () => {
@@ -81,6 +88,7 @@ const restoreState = (store: Store, storeKey: string, rules: PersistRules): Prom
 				store.$patch(result);
 				updateStorage(store, rules).then(() => {
 					subscribe();
+					if (onRestored) onRestored(store);
 					return resolve();
 				});
 			} else {
@@ -99,5 +107,5 @@ export const piniaCapacitorPersist = async ({ options, store }: PiniaPluginConte
 	} as PersistRules;
 
 	const storeKey = store.$id;
-	store.restored = restoreState(store, storeKey, rules);
+	store.restored = restoreState(store, storeKey, rules, options.persist.onRestored);
 };

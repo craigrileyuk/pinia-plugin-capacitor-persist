@@ -50,10 +50,11 @@ export const useUserStore = defineStore('user', {
 
 ## Persist options
 
-| Option    | Type  | Example       | Description                    |
-| --------- | ----- | ------------- | ------------------------------ |
-| `include` | Array | `['address']` | Only persist these properties  |
-| `exclude` | Array | `['name']`    | Don't persist these properties |
+| Option       | Type     | Example                      | Description                             |
+| ------------ | -------- | ---------------------------- | --------------------------------------- |
+| `include`    | Array    | `['address']`                | Only persist these properties           |
+| `exclude`    | Array    | `['name']`                   | Don't persist these properties          |
+| `onRestored` | Function | `(store) => { // do stuff }` | Callback function for after restoration |
 
 ---
 
