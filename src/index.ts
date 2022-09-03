@@ -69,10 +69,28 @@ const updateStorage = async (store: Store, rules: PersistRules) => {
 	}
 };
 
-export const piniaCapacitorPersist = async ({
-	options,
-	store /*, pinia, app */,
-}: PiniaPluginContext): Promise<void> => {
+const restoreState = (store: Store, storeKey: string, rules: PersistRules): Promise<void> =>
+	new Promise((resolve) => {
+		getItem(storeKey).then((result) => {
+			const subscribe = () => {
+				store.$subscribe(() => {
+					updateStorage(store, rules);
+				});
+			};
+			if (result) {
+				store.$patch(result);
+				updateStorage(store, rules).then(() => {
+					subscribe();
+					return resolve();
+				});
+			} else {
+				subscribe();
+				return resolve();
+			}
+		});
+	});
+
+export const piniaCapacitorPersist = async ({ options, store }: PiniaPluginContext): Promise<void> => {
 	if (options.persist?.enabled !== true) return;
 
 	const rules = {
@@ -81,14 +99,5 @@ export const piniaCapacitorPersist = async ({
 	} as PersistRules;
 
 	const storeKey = store.$id;
-	const storageResult = await getItem(storeKey);
-
-	if (storageResult) {
-		store.$patch(storageResult);
-		updateStorage(store, rules);
-	}
-
-	store.$subscribe(() => {
-		updateStorage(store, rules);
-	});
+	store.restored = restoreState(store, storeKey, rules);
 };

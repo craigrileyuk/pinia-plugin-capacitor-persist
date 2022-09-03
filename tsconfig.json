@@ -17,7 +17,6 @@
     "declarationDir": "./dist",
     "types": [
       "@types/node",
-      "vitest/globals"
     ]
   },
   "include": ["src"]
