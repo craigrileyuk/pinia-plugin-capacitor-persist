@@ -27,5 +27,5 @@ const { name, address, address_2, city, country } = storeToRefs(mainStore);
 	console.log(mainStore.name);
 })();
 
-console.log(mainStore.foo);
+console.log(mainStore.name);
 </script>

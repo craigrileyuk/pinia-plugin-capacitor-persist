@@ -21,6 +21,9 @@ declare module 'pinia' {
 	export interface DefineStoreOptionsBase<S, Store> {
 		persist?: PersistOptions;
 	}
+	export interface PiniaCustomProperties {
+		restored: Promise<void>;
+	}
 }
 
 const getItem = async (key: string) => {

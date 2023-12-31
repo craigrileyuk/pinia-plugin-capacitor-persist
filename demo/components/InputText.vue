@@ -19,6 +19,8 @@
 </template>
 
 <script setup>
+import { ref, computed } from "vue";
+
 const emit = defineEmits(['update:modelValue']);
 const props = defineProps({
 	id: {
@@ -39,15 +41,15 @@ const props = defineProps({
 	},
 });
 
-let internalValue = $ref('');
+let internalValue = ref('');
 
-const internalProxy = $computed({
+const internalProxy = computed({
 	get() {
-		return props.modelValue || internalValue;
+		return props.modelValue || internalValue.value;
 	},
 	set(v) {
 		emit('update:modelValue', v);
-		internalValue = v;
+		internalValue.value = v;
 	},
 });
 </script>

@@ -1,80 +1,81 @@
 {
-  "name": "pinia-plugin-capacitor-persist",
-  "description": "A Vue 3 Pinia plugin which persists store content using the CapacitorJS Preferences store.",
-  "version": "1.2.0",
-  "license": "MIT",
-  "author": "Craig Riley <hello@craigriley.uk> (https://craigriley.uk)",
-  "funding": [
-    {
-      "type": "github",
-      "url": "https://github.com/sponsors/craigrileyuk/"
-    }
-  ],
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/craigrileyuk/pinia-plugin-capacitor-persist.git"
-  },
-  "scripts": {
-    "demo": "vite -c vite-demo.config.ts",
-    "dev": "vite",
-    "build": "vite build && tsc",
-    "lint": "eslint . --ext .ts"
-  },
-  "files": [
-    "dist",
-    "types"
-  ],
-  "main": "./dist/pinia-capacitor-persist.umd.js",
-  "module": "./dist/pinia-capacitor-persist.es.js",
-  "exports": {
-    ".": {
-      "import": "./dist/pinia-capacitor-persist.es.js",
-      "require": "./dist/pinia-capacitor-persist.umd.js"
-    }
-  },
-  "types": "./dist",
-  "devDependencies": {
-    "@babel/types": "^7.17.0",
-    "@types/node": "^18.7.13",
-    "@typescript-eslint/eslint-plugin": "^5.14.0",
-    "@typescript-eslint/parser": "^5.14.0",
-    "@vitejs/plugin-vue": "^3.0.3",
-    "autoprefixer": "^10.4.8",
-    "c8": "^7.11.0",
-    "eslint": "^8.10.0",
-    "eslint-config-prettier": "^8.5.0",
-    "eslint-plugin-prettier": "^4.0.0",
-    "eslint-plugin-simple-import-sort": "^7.0.0",
-    "happy-dom": "^2.46.0",
-    "pinia": "^2.0.0",
-    "postcss": "^8.4.16",
-    "prettier": "^2.5.1",
-    "tailwindcss": "^3.1.8",
-    "typescript": "^4.5.4",
-    "vite": "^3.0.9",
-    "vue": "^3.2.31"
-  },
-  "peerDependencies": {
-    "@capacitor/preferences": "^4.0.0",
-    "pinia": "^2.0.0",
-    "vue": "^3.0.0"
-  },
-  "peerDependenciesMeta": {
-    "@vue/composition-api": {
-      "optional": true
-    }
-  },
-  "keywords": [
-    "vue",
-    "vue3",
-    "store",
-    "pinia",
-    "capacitor",
-    "capacitorjs",
-    "quasar",
-    "mobile",
-    "persist",
-    "plugin",
-    "async"
-  ]
+	"name": "pinia-plugin-capacitor-persist",
+	"description": "A Vue 3 Pinia plugin which persists store content using the CapacitorJS Preferences store.",
+	"version": "1.3.0",
+	"license": "MIT",
+	"author": "Craig Riley <hello@craigriley.uk> (https://craigriley.uk)",
+	"funding": [
+		{
+			"type": "github",
+			"url": "https://github.com/sponsors/craigrileyuk/"
+		}
+	],
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/craigrileyuk/pinia-plugin-capacitor-persist.git"
+	},
+	"scripts": {
+		"demo": "vite -c vite-demo.config.ts",
+		"dev": "vite",
+		"build": "vite build && tsc",
+		"lint": "eslint . --ext .ts"
+	},
+	"files": [
+		"dist",
+		"types"
+	],
+	"main": "./dist/pinia-capacitor-persist.umd.js",
+	"module": "./dist/pinia-capacitor-persist.es.js",
+	"exports": {
+		".": {
+			"import": "./dist/pinia-capacitor-persist.es.js",
+			"require": "./dist/pinia-capacitor-persist.umd.js"
+		}
+	},
+	"type": "module",
+	"types": "./dist",
+	"devDependencies": {
+		"@babel/types": "^7.17.0",
+		"@types/node": "^20.0.0",
+		"@typescript-eslint/eslint-plugin": "^6.0.0",
+		"@typescript-eslint/parser": "^6.0.0",
+		"@vitejs/plugin-vue": "^5.0.0",
+		"autoprefixer": "^10.4.8",
+		"c8": "^7.11.0",
+		"eslint": "^8.10.0",
+		"eslint-config-prettier": "^9.0.0",
+		"eslint-plugin-prettier": "^5.0.0",
+		"eslint-plugin-simple-import-sort": "^7.0.0",
+		"happy-dom": "^2.46.0",
+		"pinia": "^2.0.0",
+		"postcss": "^8.4.16",
+		"prettier": "^3.0.0",
+		"tailwindcss": "^3.1.8",
+		"typescript": "^5.0.0",
+		"vite": "^5.0.0",
+		"vue": "^3.2.31"
+	},
+	"peerDependencies": {
+		"@capacitor/preferences": "^4.0.0 || ^5.0.0",
+		"pinia": "^2.0.0",
+		"vue": "^3.0.0"
+	},
+	"peerDependenciesMeta": {
+		"@vue/composition-api": {
+			"optional": true
+		}
+	},
+	"keywords": [
+		"vue",
+		"vue3",
+		"store",
+		"pinia",
+		"capacitor",
+		"capacitorjs",
+		"quasar",
+		"mobile",
+		"persist",
+		"plugin",
+		"async"
+	]
 }
