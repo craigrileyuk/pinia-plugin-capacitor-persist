@@ -1,5 +1,5 @@
 import { Preferences, GetResult, KeysResult } from '@capacitor/preferences';
-import { PiniaPluginContext } from 'pinia';
+import type { PiniaPluginContext } from 'pinia';
 
 type Store = PiniaPluginContext['store'];
 type PartialState = Partial<Store['$state']>;
@@ -18,6 +18,7 @@ export interface PersistRules {
 }
 
 declare module 'pinia' {
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	export interface DefineStoreOptionsBase<S, Store> {
 		persist?: PersistOptions;
 	}
