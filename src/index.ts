@@ -56,7 +56,7 @@ export const getKeys = async (): Promise<KeysResult> => {
 	return Preferences.keys();
 };
 
-const updateStorage = async (store: Store, rules: PersistRules) => {
+export const updateStorage = async (store: Store, rules: PersistRules) => {
 	const storeKey = store.$id;
 
 	if (rules.include || rules.exclude) {
