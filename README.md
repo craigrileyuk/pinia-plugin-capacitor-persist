@@ -1,3 +1,8 @@
+<p align="center" style="display:flex;align-items:center;gap:1rem;justify-content:center">
+<a href="https://github.com/sponsors/craigrileyuk" target="_blank"><img src="https://img.shields.io/badge/sponsor-GitHub%20Sponsors-fafbfc?style=for-the-badge&logo=github" /></a>
+<a href="https://www.buymeacoffee.com/craigrileyuk" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" style="height: 60px !important;width: 217px !important;" /></a>
+</p>
+
 # Pinia Persist Plugin for Capacitor
 
 Pinia plugin that syncs with Capacitor's Preferences plugin's storage.
