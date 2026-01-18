@@ -15,5 +15,11 @@ export const useMainStore = defineStore('main', {
 		onRestored: (store) => {
 			console.log(`"${store.$id}" was successfully restored`);
 		},
+        serialiser: {
+            serialise: (value) => {
+                console.log('Running serialise function');
+                return JSON.stringify(value);
+            },
+        },
 	},
 });

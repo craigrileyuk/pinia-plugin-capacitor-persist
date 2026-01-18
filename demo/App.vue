@@ -1,8 +1,8 @@
 <template>
 	<main
-		class="bg-gradient-to-br from-slate-700 to-blue-400 min-h-screen text-white/70 flex justify-center items-center"
+		class="bg-linear-to-br from-slate-700 to-blue-400 min-h-screen text-white/70 flex justify-center items-center"
 	>
-		<div class="backdrop-blur px-4 py-2 bg-white/20 rounded-lg w-1/4">
+		<div class="backdrop-blur px-4 py-2 bg-white/20 rounded-lg min-w-sm w-1/4">
 			<h1 class="text-2xl text-center mb-4 uppercase font-black">Something Formy</h1>
 			<InputText v-model="name" label="Name" id="name" />
 			<InputText v-model="address" label="Address Line 1" id="address" />
