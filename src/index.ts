@@ -102,7 +102,7 @@ const restoreState = (
 		});
 	});
 
-export const piniaCapacitorPersist = async ({ options, store }: PiniaPluginContext): Promise<void> => {
+export const piniaCapacitorPersist = ({ options, store }: PiniaPluginContext): void => {
 	if (options.persist?.enabled !== true) return;
 
 	const rules = {
