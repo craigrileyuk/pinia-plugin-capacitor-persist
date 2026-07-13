@@ -55,9 +55,9 @@
     "vue": "^3.2.31"
   },
   "peerDependencies": {
-    "@capacitor/preferences": "^5.0.0 || ^6.0 || ^7.0",
-    "pinia": "^2.0.0 || ^3.0",
-    "vue": "^3.0.0"
+    "@capacitor/preferences": "^5.0.0 || ^6.0 || ^7.0 || ^8.0",
+    "pinia": "^2.0 || ^3.0",
+    "vue": "^3.0"
   },
   "peerDependenciesMeta": {
     "@vue/composition-api": {
