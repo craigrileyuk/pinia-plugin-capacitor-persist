@@ -1,16 +1,16 @@
 import path from 'path';
-import { defineConfig } from 'vite';
+import { defineConfig } from 'vitest/config';
 
 export default defineConfig({
 	resolve: {
 		alias: {
-			'@': path.resolve(__dirname, './src'),
-			'@@': path.resolve(__dirname, './'),
+			'@': path.resolve(import.meta.dirname, './src'),
+			'@@': path.resolve(import.meta.dirname, './'),
 		},
 	},
 	build: {
 		lib: {
-			entry: path.resolve(__dirname, 'src/index.ts'),
+			entry: path.resolve(import.meta.dirname, 'src/index.ts'),
 			name: 'piniaCapacitorPersist',
 			fileName: (format: string) => `pinia-capacitor-persist.${format}.js`,
 			formats: ['es', 'umd'],
@@ -23,5 +23,8 @@ export default defineConfig({
 				},
 			},
 		},
+	},
+	test: {
+		environment: 'jsdom',
 	},
 });

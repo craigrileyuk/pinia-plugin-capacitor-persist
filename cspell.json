@@ -1,16 +1,10 @@
 {
-    "version": "0.2",
-    "ignorePaths": [],
-    "dictionaryDefinitions": [],
-    "dictionaries": [],
-    "words": [
-        "Deserialise",
-        "pinia",
-        "serialiser"
-    ],
-    "ignoreWords": [
-        "Formy",
-        "capacitorjs"
-    ],
-    "import": []
+	"version": "0.2",
+	"language": "en_GB",
+	"ignorePaths": [],
+	"dictionaryDefinitions": [],
+	"dictionaries": [],
+	"words": ["Deserialise", "pinia", "serialiser"],
+	"ignoreWords": ["Formy", "capacitorjs", "vars"],
+	"import": []
 }

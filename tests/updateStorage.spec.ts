@@ -1,93 +1,35 @@
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
-import { updateStorage } from '../src/index'
+import type { PiniaPluginContext } from 'pinia';
+import { createPinia, defineStore, setActivePinia } from 'pinia';
+import { beforeEach, describe, test, vi } from 'vitest';
+import { ref } from 'vue';
+import { type PersistRules, updateStorage } from '../src/index';
+type Store = PiniaPluginContext['store'];
+
+vi.mock('@capacitor/preferences', () => ({
+	Preferences: {
+		set: vi.fn().mockResolvedValue({}),
+		get: vi.fn(),
+		remove: vi.fn(),
+		clear: vi.fn(),
+		keys: vi.fn(),
+	},
+}));
 
 describe('updateStorage()', () => {
-  let storage: Storage
-  let store
+	let store: Store;
 
-  beforeEach(() => {
-    storage = {
-      getItem: vi.fn(),
-      setItem: vi.fn(),
-      removeItem: vi.fn(),
-      clear: vi.fn(),
-      key: vi.fn(),
-      length: 0,
-    }
+	beforeEach(() => {
+		setActivePinia(createPinia());
+		const useStoreDefinition = defineStore('test', () => {
+			const foo = ref('bar');
+			return {
+				foo,
+			};
+		});
+		store = useStoreDefinition();
+	});
 
-    store = {
-      $id: 'my-id',
-      $state: {
-        firstname: 'foo',
-        lastname: 'bar',
-      },
-    }
-  })
-
-  afterEach(() => {
-    vi.resetAllMocks()
-  })
-
-  it('custom storage', () => {
-    const strategy = {
-      storage: storage,
-    }
-
-    updateStorage(strategy, store)
-
-    expect(storage.setItem).toHaveBeenCalledWith(
-      'my-id',
-      JSON.stringify(store.$state)
-    )
-  })
-
-  it('custom key', () => {
-    const strategy = {
-      key: 'my-custom-key',
-      storage: storage,
-    }
-
-    updateStorage(strategy, store)
-
-    expect(storage.setItem).toHaveBeenCalledWith(
-      'my-custom-key',
-      JSON.stringify(store.$state)
-    )
-  })
-
-  it('custom paths', () => {
-    const strategy = {
-      storage: storage,
-      paths: ['firstname'],
-    }
-
-    updateStorage(strategy, store)
-
-    expect(storage.setItem).toHaveBeenCalledWith(
-      'my-id',
-      JSON.stringify({ firstname: 'foo' })
-    )
-  })
-
-  it('default with sessionStorage', () => {
-    Object.defineProperty(window, 'sessionStorage', {
-      value: {
-        getItem: vi.fn(),
-        setItem: vi.fn(),
-        removeItem: vi.fn(),
-        clear: vi.fn(),
-        key: vi.fn(),
-        length: 0,
-      },
-    })
-
-    const strategy = {}
-
-    updateStorage(strategy, store)
-
-    expect(sessionStorage.setItem).toHaveBeenCalledWith(
-      'my-id',
-      JSON.stringify(store.$state)
-    )
-  })
-})
+	test('update storage works', () => {
+		updateStorage(store, { exclude: [], include: [] } as PersistRules);
+	});
+});

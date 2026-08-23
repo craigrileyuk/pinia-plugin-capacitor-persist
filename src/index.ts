@@ -1,4 +1,4 @@
-import { Preferences, GetResult, KeysResult } from '@capacitor/preferences';
+import { KeysResult, Preferences } from '@capacitor/preferences';
 import type { PiniaPluginContext } from 'pinia';
 
 type Store = PiniaPluginContext['store'];
@@ -11,10 +11,9 @@ export interface PersistOptions {
 	exclude?: string[];
 	onRestored?: RestoredFunction;
 }
-
 export interface PersistRules {
-	include: string[];
-	exclude: string[];
+	include?: string[];
+	exclude?: string[];
 }
 
 declare module 'pinia' {
@@ -26,90 +25,80 @@ declare module 'pinia' {
 		restored: Promise<void>;
 	}
 }
-
+const replacer = (value: Record<string, unknown>) => {
+	return Object.fromEntries(
+		Object.entries(value).map(([key, value]) => {
+			if (value instanceof Map) {
+				return [key, { __type: 'Map', value: [...value.entries()] }];
+			}
+			if (value instanceof Set) {
+				return [key, { __type: 'Set', value: [...value.values()] }];
+			}
+			return [key, value];
+		})
+	);
+};
+const reviver = (value: Record<string, unknown>): PartialState => {
+	return Object.fromEntries(
+		Object.entries(value).map(([key, value]) => {
+			if (value && typeof value === 'object' && '__type' in value) {
+				const typed = value as { __type: string; value: Iterable<unknown> };
+				if (typed.__type === 'Map') {
+					return [key, new Map(typed.value as [unknown, unknown][])];
+				}
+				if (typed.__type === 'Set') {
+					return [key, new Set(typed.value)];
+				}
+			}
+			return [key, value];
+		})
+	) as PartialState;
+};
 const getItem = async (key: string) => {
-	return Preferences.get({
-		key,
-	}).then((res: GetResult) => {
-		if (res && res.value) return JSON.parse(res.value);
-		else return res.value;
-	});
+	const { value } = await Preferences.get({ key });
+	return value ? reviver(JSON.parse(value)) : null;
 };
-
-const setItem = async (key: string, value: string | number | object): Promise<void> => {
-	return Preferences.set({
-		key,
-		value: JSON.stringify(value),
-	});
+const setItem = async (key: string, value: Record<string, unknown>): Promise<void> => {
+	return Preferences.set({ key, value: JSON.stringify(replacer(value)) });
 };
-
 export const clear = async (): Promise<void> => {
 	return Preferences.clear();
 };
-
 export const removeItem = async (key: string): Promise<void> => {
-	return Preferences.remove({
-		key,
-	});
+	return Preferences.remove({ key });
 };
-
 export const getKeys = async (): Promise<KeysResult> => {
 	return Preferences.keys();
 };
-
 export const updateStorage = async (store: Store, rules: PersistRules) => {
 	const storeKey = store.$id;
-
 	if (rules.include || rules.exclude) {
-		const paths = rules.include
-			? rules.include
-			: Object.keys(store.$state).filter((key) => rules.exclude.includes(key) === false);
-
+		const exclude = rules.exclude ?? [];
+		const paths =
+			rules.include && rules.include.length
+				? rules.include
+				: Object.keys(store.$state).filter((key) => exclude.includes(key) === false);
 		const partialState = paths.reduce((acc, curr) => {
 			acc[curr] = store.$state[curr];
 			return acc;
 		}, {} as PartialState);
-		setItem(storeKey, partialState);
+		await setItem(storeKey, partialState);
 	} else {
-		setItem(storeKey, store.$state);
+		await setItem(storeKey, store.$state);
 	}
 };
-
-const restoreState = (
-	store: Store,
-	storeKey: string,
-	rules: PersistRules,
-	onRestored?: RestoredFunction
-): Promise<void> =>
-	new Promise((resolve) => {
-		getItem(storeKey).then((result) => {
-			const subscribe = () => {
-				store.$subscribe(() => {
-					updateStorage(store, rules);
-				});
-			};
-			if (result) {
-				store.$patch(result);
-				updateStorage(store, rules).then(() => {
-					subscribe();
-					if (onRestored) onRestored(store);
-					return resolve();
-				});
-			} else {
-				subscribe();
-				return resolve();
-			}
-		});
+const restoreState = async (store: Store, rules: PersistRules, onRestored?: RestoredFunction): Promise<void> => {
+	const state = await getItem(store.$id);
+	if (state) {
+		store.$patch(state);
+	}
+	store.$subscribe(() => {
+		void updateStorage(store, rules);
 	});
-
+	await onRestored?.(store);
+};
 export const piniaCapacitorPersist = ({ options, store }: PiniaPluginContext): void => {
 	if (options.persist?.enabled !== true) return;
-
-	const rules = {
-		include: options.persist.include,
-		exclude: options.persist.exclude,
-	} as PersistRules;
-
-	const storeKey = store.$id;
-	store.restored = restoreState(store, storeKey, rules, options.persist.onRestored);
+	const rules: PersistRules = { include: options.persist.include, exclude: options.persist.exclude };
+	store.restored = restoreState(store, rules, options.persist.onRestored);
 };

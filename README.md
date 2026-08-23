@@ -26,9 +26,7 @@ import App from './App.vue';
 const pinia = createPinia();
 pinia.use(piniaCapacitorPersist);
 
-createApp(App)
-    .use(pinia)
-    .mount('#app');
+createApp(App).use(pinia).mount('#app');
 ```
 
 Then you can enable persist as part of your store declarations:
@@ -48,7 +46,7 @@ export const useUserStore = defineStore('user', {
 	},
 	persist: {
 		enabled: true,
-        // See below for additional options that go here
+		// See below for additional options that go here
 	},
 });
 ```
@@ -57,6 +55,7 @@ export const useUserStore = defineStore('user', {
 
 | Option       | Type     | Example                      | Description                             |
 | ------------ | -------- | ---------------------------- | --------------------------------------- |
+| `enabled`    | Boolean  | `true`                       | Should the store be persisted?          |
 | `include`    | Array    | `['address']`                | Only persist these properties           |
 | `exclude`    | Array    | `['name']`                   | Don't persist these properties          |
 | `onRestored` | Function | `(store) => { // do stuff }` | Callback function for after restoration |
@@ -67,26 +66,25 @@ export const useUserStore = defineStore('user', {
 
 Because CapacitorJS uses async functions to read/write its storage, there may be times when you need to await your store being hydrated from local storage before doing an action.
 
-Fortunately, there's a property, `restored`, that's added to *each* of your persist enabled stores that can be awaited.
+Fortunately, there's a property, `restored`, that's added to _each_ of your persist enabled stores that can be awaited.
 
 ```js
-import { createRouter, createWebHashHistory } from "vue-router";
-import routes from "@/router/routes";
-import { useUserStore } from "@/stores/user";
-import { axiosInstance } from "@/plugins/axios";
+import { createRouter, createWebHashHistory } from 'vue-router';
+import routes from '@/router/routes';
+import { useUserStore } from '@/stores/user';
+import { axiosInstance } from '@/plugins/axios';
 
 const router = createRouter({
-  history: createWebHashHistory(),
-  routes,
+	history: createWebHashHistory(),
+	routes,
 });
 
 router.beforeEach(async () => {
-    const userStore = useUserStore();
-    await userStore.restored;
+	const userStore = useUserStore();
+	await userStore.restored;
 
-    axiosInstance.defaults.headers.common['Authorization'] = `Bearer ${userStore.token}`;
-})
+	axiosInstance.defaults.headers.common['Authorization'] = `Bearer ${userStore.token}`;
+});
 
 export default router;
 ```
-

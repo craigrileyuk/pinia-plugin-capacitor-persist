@@ -8,6 +8,8 @@ export const useMainStore = defineStore('main', {
 			address_2: '',
 			city: '',
 			country: '',
+			map: new Map(),
+			set: new Set(),
 		};
 	},
 	persist: {
@@ -15,11 +17,11 @@ export const useMainStore = defineStore('main', {
 		onRestored: (store) => {
 			console.log(`"${store.$id}" was successfully restored`);
 		},
-        serialiser: {
-            serialise: (value) => {
-                console.log('Running serialise function');
-                return JSON.stringify(value);
-            },
-        },
+		/* 		serialiser: {
+			serialise: (value) => {
+				console.log('Running serialise function');
+				return JSON.stringify(value);
+			},
+		}, */
 	},
 });
