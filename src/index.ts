@@ -3,7 +3,7 @@ import type { PiniaPluginContext } from 'pinia';
 
 type Store = PiniaPluginContext['store'];
 type PartialState = Partial<Store['$state']>;
-type RestoredFunction = (store: Store) => void;
+type RestoredFunction = (store: Store) => Promise<void> | void;
 
 export interface PersistOptions {
 	enabled: true;
@@ -90,10 +90,31 @@ export const updateStorage = async (store: Store, rules: PersistRules) => {
 const restoreState = async (store: Store, rules: PersistRules, onRestored?: RestoredFunction): Promise<void> => {
 	const state = await getItem(store.$id);
 	if (state) {
-		store.$patch(state);
+		store.$patch((existingState) => {
+			for (const property in state) {
+				const existing = existingState[property];
+				const value = state[property];
+				if (existing instanceof Map && value instanceof Map) {
+					existing.clear();
+					for (const [key, item] of value) {
+						existing.set(key, item);
+					}
+				} else if (existing instanceof Set && value instanceof Set) {
+					existing.clear();
+					for (const item of value) {
+						existing.add(item);
+					}
+				} else {
+					existingState[property] = value;
+				}
+			}
+		});
 	}
+
+	// Ensure the previous update has completed before starting another
+	let pendingWrite = Promise.resolve();
 	store.$subscribe(() => {
-		void updateStorage(store, rules);
+		pendingWrite = pendingWrite.catch(() => undefined).then(() => updateStorage(store, rules));
 	});
 	await onRestored?.(store);
 };

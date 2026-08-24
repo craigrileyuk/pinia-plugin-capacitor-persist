@@ -17,7 +17,7 @@
 	},
 	"scripts": {
 		"demo": "vite -c vite-demo.config.ts",
-		"dev": "vite",
+		"dev": "vite --host",
 		"build": "vite build && tsc",
 		"lint": "eslint ./src --ext .ts",
 		"prepublishOnly": "npm run lint && npm run build",

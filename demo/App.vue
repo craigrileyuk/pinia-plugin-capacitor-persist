@@ -46,12 +46,6 @@ import { useMainStore } from './stores/main';
 const mainStore = useMainStore();
 const { name, address, address_2, city, country, map, set } = storeToRefs(mainStore);
 
-(async () => {
-	await mainStore.restored;
-	console.log(mainStore.restored);
-	console.log(mainStore.name);
-})();
-
 const randomString = () => Math.random().toString(36).slice(2);
 const onRandomiseMap = () => {
 	const key = randomString();
